@@ -1,0 +1,12 @@
+<head></head>
+<body>
+  <form method="post" action="/pics" enctype="multipart/form-data">
+    <input type="file" id="img_file" name="img_file" class="col-sm-4">
+    <input type="submit" value="送信" class="btn">
+  </form>
+  <div class="container">
+    {% for picture in pictures %}
+      <img src="{{ picture }}">
+    {% endfor %}
+  </div>
+</body>
