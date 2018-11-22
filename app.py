@@ -15,12 +15,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #OKな拡張子の設定
 def allowed_file(filename):
-   return '.' in filename and filename.rsplit('.', 1)[-1] in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[-1] in ALLOWED_EXTENSIONS
 
 @app.route("/")
 def hello():
     return render_template('top.html')
-
 
 # /pics内の処理
 @app.route('/pics', methods=['GET', 'POST'])
@@ -60,3 +59,13 @@ def pictures():
     else:
         return redirect(url_for('pictures'))
         print('error')
+
+@app.route('/api/pics', methods=['GET', 'DELETE'])
+def api_pictures():
+    if request.method == 'GET':
+        pictures = glob.glob('static/pic/*')
+        return jsonify(pictures)
+    elif request.method == 'DELETE':
+        # TODO: ここに画像を消すための処理 
+        path = request.args.get('path')
+        return jsonify({'message': "{} deleted".format(path)})

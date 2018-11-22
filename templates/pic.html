@@ -1,34 +1,50 @@
 {% extends "layout.html" %}
 {% block body %}
 <!--画像投稿フォーム-->
-    <form method="post" action="/pics" enctype="multipart/form-data">
-        <input type="file" id="img_file" name="img_file" class="col-sm-4">
-        <input type="submit" value="送信" class="btn">
-    </form>
+<form method="post" action="/pics" enctype="multipart/form-data">
+  <input type="file" id="img_file" name="img_file" class="col-sm-4">
+  <input type="submit" value="送信" class="btn">
+</form>
 
 
-    <form name="del">
-        <input type="submit" id="delete" value="削除">
-    </form>
+<form name="del">
+  <input type="submit" id="delete" value="削除">
+</form>
 
-    <div class="container">
-        {% for picture in pictures %}
-        <img src="{{ picture }}">
-        <!--ファイル名(拡張子非表示)-->
-        <!--{{ picture[picture.index('pic/')+4 : picture.index('.')] }}-->
-        <!-- <input type="submit" value="削除" class="btn"> -->
-        {% endfor %}
-    </div>
+<div class="container">
+  {% for picture in pictures %}
+  <img src="{{ picture }}">
+  <!--ファイル名(拡張子非表示)-->
+  <!--{{ picture[picture.index('pic/')+4 : picture.index('.')] }}-->
+  <!-- <input type="submit" value="削除" class="btn"> -->
+  {% endfor %}
+</div>
 
-    <script>
-    {% if status == 'BadFileName' %}
-        alert('拡張子は[png, jpg, gif]のみアップロードできます');//説明を丁寧にしたい
-    {% endif %}
-    {% if status == 'TooLarge' %}
-        alert('1MBまでのファイルをアップロードできます');//実装してない
-    {% endif %}
-    {% if status == 'NoFile' %}
-        alert('ファイルを選択してください');
-    {% endif %}
-    </script>
+<div id="alter-album"></div>
+
+<script>
+  function renderPictures() {
+    const album = document.getElementById('alter-album');
+    getPictures().then(pictures => {
+      pictures.forEach(picture => {
+        let img = document.createElement('img')
+        img.src = picture
+        img.addEventListener("click", () => deletePicture(picture))
+        album.appendChild(img)
+      })
+    })
+  }
+
+function getPictures() {
+  return fetch("/api/pics", { headers: {'Content-Security-Policy': "default-src 'self'"}})
+    .then(res => res.json())
+}
+
+function deletePicture(path) {
+ return fetch("/api/pics?path="+path, { method: 'DELETE'})
+    .then(res => res.json())
+    .then(json => console.log(json))
+}
+window.addEventListener("load",  renderPictures);
+</script>
 {% endblock %}
