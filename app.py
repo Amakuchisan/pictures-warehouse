@@ -1,7 +1,7 @@
 import os
 import glob
 import re
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 
 app = Flask(__name__, static_folder='static')
 
@@ -52,7 +52,8 @@ def pictures():
             return render_template('pic.html', pictures=pictures)
         elif img_file:
             pictures = glob.glob('static/pic/*')
-            return render_template('pic.html', pictures=pictures, status = 'BadFileName')
+            return jsonify(status = 'BadFileName')
+            return render_template('pic.html', pictures=pictures)
         else:
             pictures = glob.glob('static/pic/*')
             return render_template('pic.html', pictures=pictures, status = 'NoFile')
