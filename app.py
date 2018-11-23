@@ -51,10 +51,11 @@ def pictures():
             return render_template('pic.html', pictures=pictures)
         elif img_file:
             pictures = glob.glob('static/pic/*')
-            return jsonify(status = 'BadFileName')
+            #拡張子がダメ
             return render_template('pic.html', pictures=pictures)
         else:
             pictures = glob.glob('static/pic/*')
+            #ファイルが存在しない
             return render_template('pic.html', pictures=pictures, status = 'NoFile')
     else:
         return redirect(url_for('pictures'))
