@@ -11,14 +11,15 @@
   <input type="submit" id="delete" value="削除">
 </form>
 
-<div class="container">
+<!-- <div class="container">
+  Flaskで画像を表示する場合
   {% for picture in pictures %}
   <img src="{{ picture }}">
-  <!--ファイル名(拡張子非表示)-->
-  <!--{{ picture[picture.index('pic/')+4 : picture.index('.')] }}-->
-  <!-- <input type="submit" value="削除" class="btn"> -->
+  ファイル名(拡張子非表示)
+  {{ picture[picture.index('pic/')+4 : picture.index('.')] }}
+  <input type="submit" value="削除" class="btn">
   {% endfor %}
-</div>
+</div> -->
 
 <div id="alter-album"></div>
 
