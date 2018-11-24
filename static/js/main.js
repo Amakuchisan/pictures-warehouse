@@ -1,11 +1,6 @@
-window.onload = function(){
-    let del = document.getElementById("delete");
-    del.addEventListener("click", function(){
-        alert('削除するファイルを選んでください');//alert以外に変えたい
-        this.value = "削除する";
-    });
-    
-}
+//function submitBtn(){
+//    btn.disabled=true;
+//}
 
 function renderPictures() {
   const album = document.getElementById('alter-album');
@@ -24,13 +19,15 @@ function getPictures() {
     .then(res => res.json())
 }
 
+//delete
+
 function deletePicture(path) {
-  return fetch("/api/pics?path="+path, { method: 'DELETE'})
-    .then(res => res.json())
-    .then(json => console.log(json))
+//    if (confirm("本当に消しますか？")){
+        return fetch("/api/pics?path="+path, { method: 'DELETE'})
+          .then(res => res.json())
+          .then(json => console.log(json))
+//        .then(location.reload(true))
+//    }
 }
 
 window.addEventListener("load",  renderPictures);
-
-
-//fetch('status')

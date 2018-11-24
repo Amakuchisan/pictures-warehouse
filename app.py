@@ -69,4 +69,5 @@ def api_pictures():
     elif request.method == 'DELETE':
         # TODO: ここに画像を消すための処理 
         path = request.args.get('path')
+        os.remove('./'+path)
         return jsonify({'message': "{} deleted".format(path)})
