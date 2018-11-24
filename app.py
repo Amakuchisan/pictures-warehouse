@@ -1,7 +1,9 @@
 import os
 import glob
 import re
+from werkzeug.exceptions import RequestEntityTooLarge
 from flask import Flask, render_template, request, jsonify, redirect, url_for
+
 
 app = Flask(__name__, static_folder='static')
 
@@ -30,6 +32,9 @@ def pictures():
     elif request.method == 'POST':
         try:
             img_file = request.files['img_file']
+        except RequestEntityTooLarge as err:
+            print("toolarge err:{}".format(err))
+            img_file = None
         except:
             img_file = None
         # ファイルがあれば
@@ -56,16 +61,28 @@ def pictures():
         else:
             pictures = glob.glob('static/pic/*')
             #ファイルが存在しない
-            return render_template('pic.html', pictures=pictures, status = 'NoFile')
+            return render_template('pic.html', pictures=pictures)
     else:
         return redirect(url_for('pictures'))
         print('error')
 
-@app.route('/api/pics', methods=['GET', 'DELETE'])
+@app.route('/api/pics', methods=['GET', 'POST', 'DELETE'])
 def api_pictures():
     if request.method == 'GET':
         pictures = glob.glob('static/pic/*')
         return jsonify(pictures)
+    elif request.method == 'POST':
+        try:
+            img_file = request.files['img_file']
+        except:
+            img_file = None
+        # ファイルがあれば
+        if not (img_file or allowed_file(img_file.filename)):
+            #ファイルが存在しない
+            return jsonify({'file': "nofile"})
+        elif img_file and not(allowed_file(img_file.filename)):
+            #拡張子がダメ
+            return jsonify({'file': "badfile"})
     elif request.method == 'DELETE':
         # TODO: ここに画像を消すための処理 
         path = request.args.get('path')
