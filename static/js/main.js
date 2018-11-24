@@ -1,9 +1,12 @@
-//function submitBtn(){
-//    btn.disabled=true;
-//}
+function submitBtn(btn){
+    btn.disabled=true;
+    btn.value="送信中";
+    btn.form.submit();
+}
 
 function renderPictures() {
   const album = document.getElementById('alter-album');
+  while (album.firstChild) album.removeChild(album.firstChild);
   getPictures().then(pictures => {
     pictures.forEach(picture => {
       let img = document.createElement('img')
@@ -22,12 +25,11 @@ function getPictures() {
 //delete
 
 function deletePicture(path) {
-//    if (confirm("本当に消しますか？")){
-        return fetch("/api/pics?path="+path, { method: 'DELETE'})
+    if (confirm("本当に消しますか？")){
+        fetch("/api/pics?path="+path, { method: 'DELETE'})
           .then(res => res.json())
-          .then(json => console.log(json))
-//        .then(location.reload(true))
-//    }
+          .then(json => renderPictures())
+    }
 }
 
 window.addEventListener("load",  renderPictures);
