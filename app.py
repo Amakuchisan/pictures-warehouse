@@ -39,14 +39,20 @@ def api_pictures():
     if request.method == 'GET':
         pictures = glob.glob('static/pic/*')
         return jsonify(pictures)
+
     elif request.method == 'POST':
         try:
             img_file = request.files['img_file']
         except RequestEntityTooLarge as err:
             print("toolarge err:{}".format(err))
             img_file = None
+            return jsonify({'status': "false",
+                            'message': "アップロード可能なファイルサイズは1MBまでです"})
         except:
+            #ファイルが存在しない
             img_file = None
+            return jsonify({'status': "false",
+                            'message': "ファイルを選択してください"})
         # ファイルがあれば
         if img_file and allowed_file(img_file.filename) :
             filename = img_file.filename
@@ -63,18 +69,14 @@ def api_pictures():
             # 保存する
             img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             pictures = glob.glob('static/pic/*')
+            return jsonify(pictures)
         elif img_file:
             pictures = glob.glob('static/pic/*')
             #拡張子がダメ
             return jsonify({'status': "false",
                             'message': "アップロード可能な拡張子は[png, jpg, gif]です"})
         else:
-            pictures = glob.glob('static/pic/*')
-            #ファイルが存在しない
-            return jsonify({'status': "false",
-                            'message': "ファイルを選択してください"})
-#        return render_template('pic.html', pictures=pictures)
- 
+            print('ERROR!!何かの条件に満たないファイルがアップロードされました') 
     elif request.method == 'DELETE':
         # TODO: ここに画像を消すための処理 
         path = request.args.get('path')

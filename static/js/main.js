@@ -1,10 +1,14 @@
 /*-----------------------------------------------------------------------------*/
 //submitBtn
 function submitBtn(btn){
+  let form = document.getElementByID('file_post');
   btn.disabled=true;
   btn.value="送信中";
-  btn.form.submit();
+  document.getElementByID('file_post').action = "/api/pics";
+  form.target = "form_response";
 //  btn.action = "/pics";
+  btn.form.submit();
+    
 //  fetch("/api/pics", {method: 'POST'} { headers: {'Content-Security-Policy': "default-src 'self'"}})
 //    .then(res => res.json())
 //    .then(res => console.log())
