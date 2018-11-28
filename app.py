@@ -1,6 +1,7 @@
 import os
 import glob
 import re
+from flask import send_from_directory #favicon
 from werkzeug.exceptions import RequestEntityTooLarge
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 
@@ -24,11 +25,20 @@ def hello():
     return render_template('top.html')
 
 # /pics内の処理
-@app.route('/pics', methods=['GET', 'POST'])
+@app.route('/pics', methods=['GET'])
 def pictures():
     pictures = glob.glob('static/pic/*')
     if request.method == 'GET':
         return render_template('pic.html', pictures=pictures)
+    else:
+        return redirect(url_for('pictures'))
+        print('error')
+
+@app.route('/api/pics', methods=['GET', 'POST', 'DELETE'])
+def api_pictures():
+    if request.method == 'GET':
+        pictures = glob.glob('static/pic/*')
+        return jsonify(pictures)
     elif request.method == 'POST':
         try:
             img_file = request.files['img_file']
@@ -53,38 +63,28 @@ def pictures():
             # 保存する
             img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             pictures = glob.glob('static/pic/*')
-            return render_template('pic.html', pictures=pictures)
         elif img_file:
             pictures = glob.glob('static/pic/*')
             #拡張子がダメ
-            return render_template('pic.html', pictures=pictures)
+            return jsonify({'status': "false",
+                            'message': "アップロード可能な拡張子は[png, jpg, gif]です"})
         else:
             pictures = glob.glob('static/pic/*')
             #ファイルが存在しない
-            return render_template('pic.html', pictures=pictures)
-    else:
-        return redirect(url_for('pictures'))
-        print('error')
-
-@app.route('/api/pics', methods=['GET', 'POST', 'DELETE'])
-def api_pictures():
-    if request.method == 'GET':
-        pictures = glob.glob('static/pic/*')
-        return jsonify(pictures)
-    elif request.method == 'POST':
-        try:
-            img_file = request.files['img_file']
-        except:
-            img_file = None
-        # ファイルがあれば
-        if not (img_file or allowed_file(img_file.filename)):
-            #ファイルが存在しない
-            return jsonify({'file': "nofile"})
-        elif img_file and not(allowed_file(img_file.filename)):
-            #拡張子がダメ
-            return jsonify({'file': "badfile"})
+            return jsonify({'status': "false",
+                            'message': "ファイルを選択してください"})
+#        return render_template('pic.html', pictures=pictures)
+ 
     elif request.method == 'DELETE':
         # TODO: ここに画像を消すための処理 
         path = request.args.get('path')
         os.remove('./'+path)
         return jsonify({'message': "{} deleted".format(path)})
+    else:
+        return redirect(url_for('pictures'))
+        print('error')
+
+#@app.route('/favicon.ico')
+#def favicon():
+#    return send_from_directory(os.path.join(app.root_path, 'static'),
+#                            'favicon.ico', mimetype='image/vnd.microsoft.icon')

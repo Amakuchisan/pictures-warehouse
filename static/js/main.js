@@ -1,7 +1,14 @@
+/*-----------------------------------------------------------------------------*/
+//submitBtn
 function submitBtn(btn){
-    btn.disabled=true;
-    btn.value="送信中";
-    btn.form.submit();
+  btn.disabled=true;
+  btn.value="送信中";
+  btn.form.submit();
+//  btn.action = "/pics";
+//  fetch("/api/pics", {method: 'POST'} { headers: {'Content-Security-Policy': "default-src 'self'"}})
+//    .then(res => res.json())
+//    .then(res => console.log())
+  //postPictures();
 }
 
 function renderPictures() {
@@ -25,11 +32,17 @@ function getPictures() {
 //delete
 
 function deletePicture(path) {
-    if (confirm("本当に消しますか？")){
-        fetch("/api/pics?path="+path, { method: 'DELETE'})
-          .then(res => res.json())
-          .then(json => renderPictures())
-    }
+  if (confirm("本当に消しますか？")){
+    fetch("/api/pics?path="+path, { method: 'DELETE'})
+      .then(res => res.json())
+      .then(json => renderPictures())
+  }
 }
+
+/*------------------POST------------------*/
+//function postPictures(message){
+//  fetch("/api/pics", { method: 'POST' })
+//    .then(res => res.json())
+//}
 
 window.addEventListener("load",  renderPictures);

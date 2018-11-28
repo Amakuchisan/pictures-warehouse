@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 <!--画像投稿フォーム-->
-<form method="post" action="/pics" enctype="multipart/form-data">
+<form id="file_post" method="post" action="/api/pics" enctype="multipart/form-data"><!--にすると投稿後画面が切り替わるので直す-->
 <!-- <form method="post" action="/pics" enctype="multipart/form-data"> -->
   <input type="file" id="img_file" name="img_file" class="col-sm-4">
   <input type="submit" id="submit_btn" value="送信" class="btn" onclick="submitBtn(this);"> 
@@ -12,16 +12,8 @@
   <input type="submit" id="delete" value="削除">
 </form>
 
-<!-- <div class="container">
-  Flaskで画像を表示する場合
-  {% for picture in pictures %}
-  <img src="{{ picture }}">
-  ファイル名(拡張子非表示)
-  {{ picture[picture.index('pic/')+4 : picture.index('.')] }}
-  <input type="submit" value="削除" class="btn">
-  {% endfor %}
-</div> -->
 
+<iframe name="form_response" style="display:none;" ></iframe>
 <div id="alter-album"></div>
 
 {% endblock %}
