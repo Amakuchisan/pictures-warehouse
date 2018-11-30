@@ -52,6 +52,7 @@ def api_pictures():
             return jsonify({'status': "false",
                             'message': "アップロード可能なファイルサイズは1MBまでです"})
         except BadRequest as e:
+            print(e)
             return jsonify({"message": e.description})
         except:
             #ファイルが存在しない
