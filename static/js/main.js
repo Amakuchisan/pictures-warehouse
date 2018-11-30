@@ -30,22 +30,20 @@ function deletePicture(path) {
 /*----------------------------------------------------------------------------*/
 
 function get_func(url) {
-  input.value = "";//ファイルを投稿すると入力欄を初期化
+  const input = document.getElementById('img_file');
+  const btn = document.getElementById('submit_btn');
   btn.disabled = false;
   btn.value="送信";
+  input.value="";
   fetch(url)
     .then(() => renderPictures())
 }
 
+let formData = new FormData();
 
-const formData = new FormData();
-const input = document.getElementById('img_file');
-const btn = document.getElementById('submit_btn');
-input.addEventListener("change",  () => {
-    formData.append('img_file', input.files[0]);
-});
-
-const upload = (file) => {
+const upload = () => {
+  const btn = document.getElementById('submit_btn');
+  file = document.getElementById('img_file');
   btn.disabled = true;
   btn.value="送信中";
   fetch('/api/pics', {
@@ -58,7 +56,7 @@ const upload = (file) => {
   });
 };
 
-const onSelectFile = () => upload(input.files[0]);
+const onSelectFile = () => upload();
 document.getElementById('submit_btn').addEventListener('click', onSelectFile, false);
 
 
@@ -67,3 +65,12 @@ document.getElementById('submit_btn').addEventListener('click', onSelectFile, fa
 
 
 window.addEventListener("load",  renderPictures);
+window.addEventListener("load", () => {
+  const input = document.getElementById('img_file');
+  input.addEventListener("change", () => {
+    formData = new FormData();
+    formData.append('img_file', input.files[0]);
+  });
+})
+
+
