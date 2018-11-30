@@ -7,45 +7,6 @@ function submitBtn(btn){
 }
 
 
-
-/*----------------------------------------------------------------------------*/
-function get_func(url) {
-  fetch(url)
-    .then(renderPictures)
-}
-
-
-function handle(fil){
-  let btn = document.getElementById('submit_btn')
-  btn.addEventListener('click', post_func(fil))
-  console.log(btn)
-  console.log(fil)
-}
-
-
-function post_func(files) {
-  console.log(files)
-})
-    
-/*
-  // Postで送るパラメータを作成
-  const url = '/api/pics'
-  let formData = new FormData();
-  formData.append('filename', document.getElementById('img_file'));
-    fetch(url, {
-      method: 'POST',  // methodを指定しないとGETになる
-      body: formData,  // Postで送るパラメータを指定
-    })
-    .then(console.log(formData))
-    .then(console.log(files))
-    .then(function() {  // Postした後に結果をGetする（コールバックなのでPostが実行完了してから実行される）
-      get_func('/pics');
-    });
-
-*/
-
-}
-/*----------------------------------------------------------------------------*/
 /*    
 // This will upload the file after having read it
 // Select your input type file and store it in a variable
@@ -107,5 +68,65 @@ function deletePicture(path) {
 //  fetch("/api/pics", { method: 'POST' })
 //    .then(res => res.json())
 //}
+
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+function get_func(url) {
+  fetch(url)
+    .then(() => renderPictures())
+}
+
+
+function handle(fil){
+  let btn = document.getElementById("submit_btn")
+  btn.addEventListener("click", post_func(fil))
+}
+
+/*
+function post_func(fil) {
+  // Postで送るパラメータを作成
+  const url = '/api/pics'
+  let input = document.querySelector('input[type="file"]') 
+  let formData = new FormData();
+  formData.append('filename', input.files[0]);
+    fetch(url, {
+      method: 'POST',  // methodを指定しないとGETになる
+      body: formData,  // Postで送るパラメータを指定
+    })
+    .then(function() {  // Postした後に結果をGetする（コールバックなのでPostが実行完了してから実行される）
+      get_func('/pics');
+    })
+}
+*/
+
+
+const input = document.getElementById('img_file');
+const upload = (file) => {
+  fetch('/api/pics', {
+    method: 'POST',
+    body: file
+  })
+  .then(function(){
+    get_func('/pics');
+  });
+};
+
+// Event handler executed when a file is selected
+const onSelectFile = () => upload(input.files[0]);
+// Add a listener on your input
+// It will be triggered when a file will be selected
+document.getElementById('submit_btn').addEventListener('click', onSelectFile, false);
+//input.addEventListener('change', onSelectFile, false);
+
+
+/*----------------------------------------------------------------------------*/
+
+
+
 
 window.addEventListener("load",  renderPictures);
