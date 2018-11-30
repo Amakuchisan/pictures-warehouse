@@ -42,7 +42,9 @@ def api_pictures():
 
     elif request.method == 'POST':
         try:
-            img_file = request.files['img_file']
+            img_file = request.form["filename"]
+            return jsonify(img_file) 
+          # img_file = request.files['img_file']
         except RequestEntityTooLarge as err:
             print("toolarge err:{}".format(err))
             img_file = None
