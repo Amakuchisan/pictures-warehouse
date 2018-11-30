@@ -30,7 +30,9 @@ function deletePicture(path) {
 /*----------------------------------------------------------------------------*/
 
 function get_func(url) {
-  document.getElementById('img_file').value = "";//ファイルを投稿すると入力欄を初期化
+  input.value = "";//ファイルを投稿すると入力欄を初期化
+  btn.disabled = false;
+  btn.value="送信";
   fetch(url)
     .then(() => renderPictures())
 }
@@ -38,12 +40,14 @@ function get_func(url) {
 
 const formData = new FormData();
 const input = document.getElementById('img_file');
-
+const btn = document.getElementById('submit_btn');
 input.addEventListener("change",  () => {
     formData.append('img_file', input.files[0]);
 });
 
 const upload = (file) => {
+  btn.disabled = true;
+  btn.value="送信中";
   fetch('/api/pics', {
     method: 'POST',
     body: formData ,
