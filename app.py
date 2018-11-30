@@ -9,8 +9,8 @@ app = Flask(__name__, static_folder='static')
 
 #拡張子の指定
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif', 'PNG'])
-#アップロードの上限サイズを1MBにする
-app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024
+#アップロードの上限サイズを5MBにする
+app.config['MAX_CONTENT_LENGTH'] = 5*1024*1024
 
 UPLOAD_FOLDER = './static/pic'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
