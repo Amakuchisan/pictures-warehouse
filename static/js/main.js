@@ -104,14 +104,18 @@ function post_func(fil) {
 }
 */
 
-
+const formData = new FormData();
 const input = document.getElementById('img_file');
+
+formData.append('img_file', input.files[0]);
+
 const upload = (file) => {
   fetch('/api/pics', {
     method: 'POST',
-    body: file
-  })
-  .then(function(){
+    body: formData ,
+  }).then(res => res.json()
+  ).then(json => {
+    console.log(json)
     get_func('/pics');
   });
 };

@@ -2,9 +2,8 @@ import os
 import glob
 import re
 from flask import send_from_directory #favicon
-from werkzeug.exceptions import RequestEntityTooLarge
+from werkzeug.exceptions import RequestEntityTooLarge, BadRequest
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-
 
 app = Flask(__name__, static_folder='static')
 
@@ -41,22 +40,26 @@ def api_pictures():
         return jsonify(pictures)
 
     elif request.method == 'POST':
+        img_file = None
         try:
-            img_file = request.form["filename"]
-            return jsonify(img_file) 
-          # img_file = request.files['img_file']
+            # img_file = request.form["filename"]
+            # return jsonify(img_file)
+            # inputタグのnameを指定
+            img_file = request.files['img_file']
         except RequestEntityTooLarge as err:
             print("toolarge err:{}".format(err))
             img_file = None
             return jsonify({'status': "false",
                             'message': "アップロード可能なファイルサイズは1MBまでです"})
+        except BadRequest as e:
+            return jsonify({"message": e.description})
         except:
             #ファイルが存在しない
             img_file = None
             return jsonify({'status': "false",
                             'message': "ファイルを選択してください"})
         # ファイルがあれば
-        if img_file and allowed_file(img_file.filename) :
+        if img_file and allowed_file(img_file.filename):
             filename = img_file.filename
             #ここのifに重複しているときに入るようにする
             if 'static/pic/'+filename in glob.glob('static/pic/*'):
@@ -79,6 +82,7 @@ def api_pictures():
                             'message': "アップロード可能な拡張子は[png, jpg, gif]です"})
         else:
             print('ERROR!!何かの条件に満たないファイルがアップロードされました') 
+
     elif request.method == 'DELETE':
         # TODO: ここに画像を消すための処理 
         path = request.args.get('path')
