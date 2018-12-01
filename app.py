@@ -3,7 +3,7 @@ import glob
 import re
 from flask import send_from_directory #favicon
 from werkzeug.exceptions import RequestEntityTooLarge, BadRequest
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__, static_folder='static')
 
@@ -30,7 +30,6 @@ def pictures():
     if request.method == 'GET':
         return render_template('pic.html', pictures=pictures)
     else:
-        return redirect(url_for('pictures'))
         print('error')
 
 @app.route('/api/pics', methods=['GET', 'POST', 'DELETE'])
@@ -42,7 +41,6 @@ def api_pictures():
     elif request.method == 'POST':
         img_file = None
         try:
-            # img_file = request.form["filename"]
             # return jsonify(img_file)
             # inputタグのnameを指定
             img_file = request.files['img_file']
@@ -90,7 +88,6 @@ def api_pictures():
         os.remove('./'+path)
         return jsonify({'message': "{} deleted".format(path)})
     else:
-        return redirect(url_for('pictures'))
         print('error')
 
 #@app.route('/favicon.ico')
