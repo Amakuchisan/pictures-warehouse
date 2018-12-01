@@ -34,7 +34,8 @@ function get_func(url) {
   const btn = document.getElementById('submit_btn');
   btn.disabled = false;
   btn.value="送信";
-  input.value="";
+  input.value = "";
+  formData = new FormData();
   fetch(url)
     .then(() => renderPictures())
 }
@@ -68,7 +69,7 @@ window.addEventListener("load",  renderPictures);
 window.addEventListener("load", () => {
   const input = document.getElementById('img_file');
   input.addEventListener("change", () => {
-    formData = new FormData();
+//    formData = new FormData();
     formData.append('img_file', input.files[0]);
   });
 })
