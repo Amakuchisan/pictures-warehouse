@@ -45,6 +45,9 @@ let formData = new FormData();
 const upload = () => {
   const btn = document.getElementById('submit_btn');
   file = document.getElementById('img_file');
+  if (!file.value){
+      return false;
+  }
   btn.disabled = true;
   btn.value="送信中";
   fetch('/api/pics', {
