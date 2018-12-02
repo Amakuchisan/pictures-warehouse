@@ -14,18 +14,7 @@ function renderPictures() {
 
 function getPictures() {
   return fetch("/api/pics")
-//  return fetch("/api/pics", { headers: {'Content-Security-Policy': "default-src 'self'"}})
     .then(res => res.json())
-}
-
-
-/*------画像を削除する------*/
-function deletePicture(path) {
-  if (confirm("本当に消しますか？")){
-    fetch("/api/pics?path="+path, { method: 'DELETE'})
-      .then(res => res.json())
-      .then(json => renderPictures())
-  }
 }
 
 /*----------------------------------------------------------------------------*/
@@ -63,9 +52,9 @@ const upload = () => {
     afterPost();
   }).catch(err => {
       console.log(err)
-      alert("大きすぎます．アップロード可能なファイルサイズは1MBまでです")
-      afterPost();}
-  )
+      alert("ファイルサイズが1MBを超えていませんか?")
+      afterPost();
+  })
 };
 
 const onSelectFile = () => upload();
