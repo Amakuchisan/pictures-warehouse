@@ -1,7 +1,6 @@
 import os
 import glob
 import re
-from flask import send_from_directory #favicon
 from werkzeug.exceptions import RequestEntityTooLarge, BadRequest
 from flask import Flask, render_template, request, jsonify
 
@@ -11,7 +10,6 @@ app = Flask(__name__, static_folder='static')
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif', 'PNG'])
 #アップロードの上限サイズを1MBにする
 app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024
-app.config['SECRET_KEY'] = os.urandom(24)
 
 UPLOAD_FOLDER = './static/pic'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -75,16 +73,3 @@ def api_pictures():
             #拡張子がダメ
             return jsonify({'status': "false",
                             'message': "アップロード可能な拡張子は[png, jpg, gif]です"})
-        else:
-            print('ERROR!!何かの条件に満たないファイルがアップロードされました') 
-            return jsonify({'status': "false",
-                            'message': "何かの状態に満たないファイルがアップロードされました"})
-
-    else:
-        print('error')
-        return jsonify({'message': "error"})
-
-#@app.route('/favicon.ico')
-#def favicon():
-#    return send_from_directory(os.path.join(app.root_path, 'static'),
-#                            'favicon.ico', mimetype='image/vnd.microsoft.icon')

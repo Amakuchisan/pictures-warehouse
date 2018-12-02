@@ -6,7 +6,6 @@ function renderPictures() {
     pictures.forEach(picture => {
       let img = document.createElement('img')
       img.src = picture
-      img.addEventListener("click", () => deletePicture(picture))
       album.appendChild(img)
     })
   })
@@ -44,13 +43,11 @@ const upload = () => {
     body: formData ,
   }).then(res => res.json()
   ).then(json => {
-    console.log(json)
     if(json["status"] == "false"){
       alert(json["message"])
     }
     afterPost();
   }).catch(err => {
-      console.log(err)
       alert("ファイルサイズが1MBを超えていませんか?")
       afterPost();
   })
