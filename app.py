@@ -11,6 +11,7 @@ app = Flask(__name__, static_folder='static')
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif', 'PNG'])
 #アップロードの上限サイズを1MBにする
 app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024
+app.config['SECRET_KEY'] = os.urandom(24)
 
 UPLOAD_FOLDER = './static/pic'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -31,6 +32,7 @@ def pictures():
         return render_template('pic.html')
     else:
         print('error')
+        return render_template('pic.html')
 
 @app.route('/api/pics', methods=['GET', 'POST', 'DELETE'])
 def api_pictures():

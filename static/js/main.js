@@ -13,7 +13,8 @@ function renderPictures() {
 }
 
 function getPictures() {
-  return fetch("/api/pics", { headers: {'Content-Security-Policy': "default-src 'self'"}})
+  return fetch("/api/pics")
+//  return fetch("/api/pics", { headers: {'Content-Security-Policy': "default-src 'self'"}})
     .then(res => res.json())
 }
 
