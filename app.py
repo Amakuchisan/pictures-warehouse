@@ -20,9 +20,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[-1] in ALLOWED_EXTENSIONS
 
-@app.route("/")
-def hello():
-    return render_template('top.html')
 
 # /pics内の処理
 @app.route('/pics', methods=['GET'])
@@ -34,7 +31,7 @@ def pictures():
         print('error')
         return render_template('pic.html')
 
-@app.route('/api/pics', methods=['GET', 'POST', 'DELETE'])
+@app.route('/api/pics', methods=['GET', 'POST'])
 def api_pictures():
     if request.method == 'GET':
         pictures = glob.glob('static/pic/*')
@@ -43,8 +40,6 @@ def api_pictures():
     elif request.method == 'POST':
         img_file = None
         try:
-            # return jsonify(img_file)
-            # inputタグのnameを指定
             img_file = request.files['img_file']
         except RequestEntityTooLarge as err:
             print("toolarge err:{}".format(err))
@@ -85,11 +80,6 @@ def api_pictures():
             return jsonify({'status': "false",
                             'message': "何かの状態に満たないファイルがアップロードされました"})
 
-    elif request.method == 'DELETE':
-        # TODO: ここに画像を消すための処理 
-        path = request.args.get('path')
-        os.remove('./'+path)
-        return jsonify({'message': "{} deleted".format(path)})
     else:
         print('error')
         return jsonify({'message': "error"})
