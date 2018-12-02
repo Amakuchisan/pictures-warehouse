@@ -26,7 +26,6 @@ def pictures():
     if request.method == 'GET':
         return render_template('pic.html')
     else:
-        print('error')
         return render_template('pic.html')
 
 @app.route('/api/pics', methods=['GET', 'POST'])
@@ -40,15 +39,12 @@ def api_pictures():
         try:
             img_file = request.files['img_file']
         except RequestEntityTooLarge as err:
-            print("toolarge err:{}".format(err))
             return jsonify({'status': "false",
                             'message': "アップロード可能なファイルサイズは1MBまでです"})
         except BadRequest as e:
-            print(e)
             return jsonify({'status': "false",
                             "message": e.description})
         except:
-            print('error')
             return jsonify({'status': "false",
                             "message": "error"})
         # ファイルがあれば
