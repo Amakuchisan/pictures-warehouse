@@ -40,7 +40,6 @@ const upload = () => {
   btn.disabled = true;
   btn.value="送信中";
   fetch('/api/pics', {
-    mode: 'cors',
     method: 'POST',
     body: formData ,
   }).then(res => res.json()
