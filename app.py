@@ -3,14 +3,15 @@ import glob
 import re
 from flask import send_from_directory #favicon
 from werkzeug.exceptions import RequestEntityTooLarge, BadRequest
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__, static_folder='static')
 
 #拡張子の指定
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif', 'PNG'])
-#アップロードの上限サイズを5MBにする
-app.config['MAX_CONTENT_LENGTH'] = 5*1024*1024
+#アップロードの上限サイズを1MBにする
+app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024
+app.config['SECRET_KEY'] = os.urandom(24)
 
 UPLOAD_FOLDER = './static/pic'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -28,10 +29,10 @@ def hello():
 def pictures():
     pictures = glob.glob('static/pic/*')
     if request.method == 'GET':
-        return render_template('pic.html', pictures=pictures)
+        return render_template('pic.html')
     else:
-        return redirect(url_for('pictures'))
         print('error')
+        return render_template('pic.html')
 
 @app.route('/api/pics', methods=['GET', 'POST', 'DELETE'])
 def api_pictures():
@@ -42,23 +43,19 @@ def api_pictures():
     elif request.method == 'POST':
         img_file = None
         try:
-            # img_file = request.form["filename"]
-            # return jsonify(img_file)
-            # inputタグのnameを指定
             img_file = request.files['img_file']
         except RequestEntityTooLarge as err:
             print("toolarge err:{}".format(err))
-            img_file = None
             return jsonify({'status': "false",
-                            'message': "アップロード可能なファイルサイズは5MBまでです"})
+                            'message': "アップロード可能なファイルサイズは1MBまでです"})
         except BadRequest as e:
             print(e)
-            return jsonify({"message": e.description})
-        except:
-            #ファイルが存在しない
-            img_file = None
             return jsonify({'status': "false",
-                            'message': "ファイルを選択してください"})
+                            "message": e.description})
+        except:
+            print('error')
+            return jsonify({'status': "false",
+                            "message": "error"})
         # ファイルがあれば
         if img_file and allowed_file(img_file.filename):
             filename = img_file.filename
@@ -83,6 +80,8 @@ def api_pictures():
                             'message': "アップロード可能な拡張子は[png, jpg, gif]です"})
         else:
             print('ERROR!!何かの条件に満たないファイルがアップロードされました') 
+            return jsonify({'status': "false",
+                            'message': "何かの状態に満たないファイルがアップロードされました"})
 
     elif request.method == 'DELETE':
         # TODO: ここに画像を消すための処理 
@@ -90,8 +89,8 @@ def api_pictures():
         os.remove('./'+path)
         return jsonify({'message': "{} deleted".format(path)})
     else:
-        return redirect(url_for('pictures'))
         print('error')
+        return jsonify({'message': "error"})
 
 #@app.route('/favicon.ico')
 #def favicon():
