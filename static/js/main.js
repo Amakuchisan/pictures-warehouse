@@ -6,7 +6,7 @@ function renderPictures() {
     pictures.forEach(picture => {
       let img = document.createElement('img')
       img.src = picture
-      img.addEventListener("click", () => deletePicture(picture))
+      console.log(picture)
       album.appendChild(img)
     })
   })
@@ -20,12 +20,35 @@ function getPictures() {
 
 
 /*------画像を削除する------*/
-function deletePicture(path) {
-  if (confirm("本当に消しますか？")){
+document.getElementById('delete').addEventListener("click", () => del())
+function del (){
+    const del = document.getElementById('delete')
+    del.value = "削除する!!"
+    let pictures = document.querySelectorAll("img")
+    pictures.forEach(picture => {
+        picture.addEventListener("click", function(){
+            picture.className = 'select';
+//            if(picture.className == 'select'){
+//                document.addEventListener("click", () => picture.className = '')
+//            }
+        })
+    }) 
+    document.getElementById('delete').addEventListener("click", () => {
+      deletePicture()
+      renderPictures()
+      document.getElementById('delete').value = "削除"
+    })
+}
+
+function deletePicture() {
+  let pictures = document.querySelectorAll("img.select")
+  pictures.forEach(picture => {
+    path = picture.src.substr(picture.src.indexOf("static", -1))
     fetch("/api/pics?path="+path, { method: 'DELETE'})
-      .then(res => res.json())
-      .then(json => renderPictures())
-  }
+//      .then(res => res.json())
+//      .then(json => renderPictures())
+    picture.className = '';
+  })
 }
 
 /*----------------------------------------------------------------------------*/

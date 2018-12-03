@@ -4,15 +4,16 @@ body{
     background: #D2EFFA;
 }
 
-    img{
-/*    width: 100px;
-    height: 100px;
-    object-fit: cover;*/
+img{
     max-width: 180px;
     max-height: 180px;
     border: 10px solid #cccccc;
     -ms-interpolation-mode: bicubic;/*IE*/
     image-rendering: optimizeQuality; /*firefox*/
+}
+
+img.select{
+    border-color: #CE1F1F;
 }
 
 
