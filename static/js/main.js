@@ -20,24 +20,33 @@ function getPictures() {
 
 
 /*------画像を削除する------*/
-document.getElementById('delete').addEventListener("click", () => del())
+document.getElementById('delete').addEventListener("click", () => {
+  if(document.getElementById('delete').value == '削除'){
+    del()
+  }else{
+    deletePicture()
+    renderPictures()
+    document.getElementById('delete').value = "削除"
+  }
+})
 function del (){
     const del = document.getElementById('delete')
     del.value = "削除する!!"
     let pictures = document.querySelectorAll("img")
     pictures.forEach(picture => {
         picture.addEventListener("click", function(){
-            picture.className = 'select';
-//            if(picture.className == 'select'){
-//                document.addEventListener("click", () => picture.className = '')
-//            }
+            if(picture.className){
+              picture.className = '';
+            }else{
+              picture.className = 'select';
+            }
         })
     }) 
-    document.getElementById('delete').addEventListener("click", () => {
-      deletePicture()
-      renderPictures()
-      document.getElementById('delete').value = "削除"
-    })
+//    document.getElementById('delete').addEventListener("click", () => {
+//      deletePicture()
+//      renderPictures()
+//      document.getElementById('delete').value = "削除"
+//    })
 }
 
 function deletePicture() {
