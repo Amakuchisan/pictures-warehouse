@@ -1,12 +1,14 @@
 /*------画像を投稿する------*/
 function renderPictures() {
   const album = document.getElementById('alter-album');
+  const del = document.getElementById('delete')
+  del.value = '削除' // この2行はここでやる処理か?
   while (album.firstChild) album.removeChild(album.firstChild);
   getPictures().then(pictures => {
     pictures.forEach(picture => {
       let img = document.createElement('img')
       img.src = picture
-      console.log(picture)
+   //   console.log(picture)
       album.appendChild(img)
     })
   })
@@ -29,24 +31,21 @@ document.getElementById('delete').addEventListener("click", () => {
     document.getElementById('delete').value = "削除"
   }
 })
+
 function del (){
-    const del = document.getElementById('delete')
-    del.value = "削除する!!"
-    let pictures = document.querySelectorAll("img")
-    pictures.forEach(picture => {
-        picture.addEventListener("click", function(){
-            if(picture.className){
-              picture.className = '';
-            }else{
-              picture.className = 'select';
-            }
-        })
-    }) 
-//    document.getElementById('delete').addEventListener("click", () => {
-//      deletePicture()
-//      renderPictures()
-//      document.getElementById('delete').value = "削除"
-//    })
+  const del = document.getElementById('delete')
+  del.value = "削除する!!"
+  console.log('delete')
+  let pictures = document.querySelectorAll("img")
+  pictures.forEach(picture => {
+    picture.addEventListener("click", function(){
+      if(picture.className == 'select' && del.value == '削除'){
+        picture.className = '';
+      }else{
+        picture.className = 'select';
+      }
+    })
+  })
 }
 
 function deletePicture() {
@@ -60,6 +59,17 @@ function deletePicture() {
   })
 }
 
+/*------キャンセル------*/
+
+document.getElementById('cansel').addEventListener("click", () => {
+  const del = document.getElementById('delete')
+  if(del.value == '削除する!!'){
+    del.value = '削除'
+    document.querySelectorAll("img.select").forEach(picture => {
+      picture.className = ''
+    })
+  }
+})
 /*----------------------------------------------------------------------------*/
 
 function afterPost() {
@@ -108,7 +118,7 @@ document.getElementById('submit_btn').addEventListener('click', onSelectFile, fa
 
 
 
-window.addEventListener("load",  renderPictures);
+window.addEventListener("load",  () => renderPictures());
 window.addEventListener("load", () => {
   const input = document.getElementById('img_file');
   input.addEventListener("change", () => {
