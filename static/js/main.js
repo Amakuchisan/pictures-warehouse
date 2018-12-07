@@ -105,7 +105,7 @@ const upload = () => {
     afterPost();
   }).catch(err => {
       console.log(err)
-      alert("大きすぎます．アップロード可能なファイルサイズは2MBまでです")
+      alert("ファイルサイズが2MBを超えていませんか?")
       afterPost();}
   )
 };
