@@ -8,8 +8,14 @@ function renderPictures() {
     pictures.forEach(picture => {
       let img = document.createElement('img')
       img.src = picture
-      img.addEventListener("click", () => showPicture(picture))
       album.appendChild(img)
+      img.addEventListener("click", () => {
+        if(del.value == '削除'){
+          showPicture(picture)
+        }else{
+          img.classList.toggle('select')
+        }
+      })
     })
   })
 }
@@ -32,6 +38,7 @@ document.getElementById('delete').addEventListener("click", () => {
   }
 })
 
+
 function del (){
   const del = document.getElementById('delete')
   del.value = "削除する!!"
@@ -39,14 +46,10 @@ function del (){
   let pictures = document.querySelectorAll("img")
   pictures.forEach(picture => {
     picture.addEventListener("click", function(){
-      if(picture.className == 'select' && del.value == '削除'){
-        picture.className = '';
-      }else{
-        picture.className = 'select';
-      }
     })
   })
 }
+
 
 function deletePicture() {
   let pictures = document.querySelectorAll("img.select")
@@ -117,11 +120,13 @@ document.getElementById('submit_btn').addEventListener('click', onSelectFile, fa
 /*----------------------------------------------------------------------------*/
 
 /*------写真を表示する------*/
+
 function showPicture(picture){
   const table = document.getElementById('pic_table');
   table.style.display = 'inline'
   console.log("画像表示したいなあ")
 }
+
 
 /*-----------------------------------------------------------------------------*/
 
