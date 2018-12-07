@@ -9,8 +9,8 @@ app = Flask(__name__, static_folder='static')
 
 #拡張子の指定
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif', 'PNG'])
-#アップロードの上限サイズを1MBにする
-app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024
+#アップロードの上限サイズを2MBにする
+app.config['MAX_CONTENT_LENGTH'] = 2*1024*1024
 app.config['SECRET_KEY'] = os.urandom(24)
 
 UPLOAD_FOLDER = './static/pic'
@@ -47,7 +47,7 @@ def api_pictures():
         except RequestEntityTooLarge as err:
             print("toolarge err:{}".format(err))
             return jsonify({'status': "false",
-                            'message': "アップロード可能なファイルサイズは1MBまでです"})
+                            'message': "アップロード可能なファイルサイズは2MBまでです"})
         except BadRequest as e:
             print(e)
             return jsonify({'status': "false",

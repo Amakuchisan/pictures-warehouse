@@ -8,7 +8,7 @@ function renderPictures() {
     pictures.forEach(picture => {
       let img = document.createElement('img')
       img.src = picture
-   //   console.log(picture)
+      img.addEventListener("click", () => showPicture(picture))
       album.appendChild(img)
     })
   })
@@ -105,7 +105,7 @@ const upload = () => {
     afterPost();
   }).catch(err => {
       console.log(err)
-      alert("大きすぎます．アップロード可能なファイルサイズは1MBまでです")
+      alert("大きすぎます．アップロード可能なファイルサイズは2MBまでです")
       afterPost();}
   )
 };
@@ -116,6 +116,14 @@ document.getElementById('submit_btn').addEventListener('click', onSelectFile, fa
 
 /*----------------------------------------------------------------------------*/
 
+/*------写真を表示する------*/
+function showPicture(picture){
+  const table = document.getElementById('pic_table');
+  table.style.display = 'inline'
+  console.log("画像表示したいなあ")
+}
+
+/*-----------------------------------------------------------------------------*/
 
 
 window.addEventListener("load",  () => renderPictures());
