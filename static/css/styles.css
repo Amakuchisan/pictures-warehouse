@@ -16,11 +16,15 @@ img.select{
     border-color: #CE1F1F;
 }
 
-
+img.table{
+   max-width: 100%;
+   max-height: none;
+   border: none;
+}
 .other-site {
     position:absolute;
     top: 20px;
-    left: 50%;
+    right: 10px;
 /*    width: 300px;*/
     height:40px;
     text-align:center;
@@ -41,5 +45,17 @@ img.select{
 .other-site a:hover{
     padding:10px 10px;
     background : #7673ff ;
+}
+
+
+
+.pic-table {
+   position: fixed;
+   display: none;
+   margin-right: 10px;
+   max-height: 100%;
+   top: 60px;
+   right 60px;
+   overflow: hidden;
 }
 

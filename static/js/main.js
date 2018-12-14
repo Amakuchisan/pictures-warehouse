@@ -123,6 +123,11 @@ document.getElementById('submit_btn').addEventListener('click', onSelectFile, fa
 
 function showPicture(picture){
   const table = document.getElementById('pic_table');
+  while (table.firstChild) table.removeChild(table.firstChild);
+  let img = document.createElement('img')
+  img.src = picture
+  img.classList.toggle('table')
+  table.appendChild(img)
   table.style.display = 'inline'
   console.log("画像表示したいなあ")
 }
@@ -130,6 +135,8 @@ function showPicture(picture){
 
 /*-----------------------------------------------------------------------------*/
 
+
+/*-----------------------------------------------------------------------------*/
 
 window.addEventListener("load",  () => renderPictures());
 window.addEventListener("load", () => {
