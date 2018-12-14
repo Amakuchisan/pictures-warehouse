@@ -47,7 +47,7 @@ def api_pictures():
         except RequestEntityTooLarge as err:
             print("toolarge err:{}".format(err))
             return jsonify({'status': "false",
-                            'message': "アップロード可能なファイルサイズは2MBまでです"})
+                            'message': "アップロード可能なファイルサイズは2MBまでです"}), 413
         except BadRequest as e:
             print(e)
             return jsonify({'status': "false",
