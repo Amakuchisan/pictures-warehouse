@@ -150,6 +150,7 @@ window.addEventListener("load",  () => renderPictures());
 window.addEventListener("load", () => {
   const input = document.getElementById('img_file');
   input.addEventListener("change", () => {
+    formData = new FormData();
     formData.append('img_file', input.files[0]);
   });
 })
