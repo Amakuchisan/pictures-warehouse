@@ -11,7 +11,7 @@ function renderPictures() {
       album.appendChild(img)
       img.addEventListener("click", () => {
         if(del.value == '削除'){
-          showPicture(picture)
+          showPicture(img, picture)
         }else{
           img.classList.toggle('select')
         }
@@ -121,26 +121,60 @@ document.getElementById('submit_btn').addEventListener('click', onSelectFile, fa
 
 /*------写真を表示する------*/
 
-function showPicture(picture){
+function showPicture(img_pic, picture){
   const table = document.getElementById('pic_table');
+  const album = document.getElementById('alter-album');
+  let pictures = album.childNodes;
   while (table.firstChild) table.removeChild(table.firstChild);
   let img = document.createElement('img')
   img.src = picture
   img.classList.toggle('table')
   table.appendChild(img)
   table.style.display = 'inline'
+ 
   document.onkeydown = function(e) {
     if (e) event = e;
     if (event) {
       if (event.keyCode == 27) {
         table.style.display = 'none'
+      }else if (event.keyCode == 39){
+        let photo = next(img_pic)
+        if(photo != null){
+          path = photo.src.substr(photo.src.indexOf("static", -1))
+          showPicture(photo, path);
+        }else{
+          showPicture(album.firstChild, album.firstChild.src.substr(album.firstChild.src.indexOf("static", -1)))
+        }
+      }else if(event.keyCode == 37){
+        let photo = previous(img_pic)
+        if(photo != null){
+          path = photo.src.substr(photo.src.indexOf("static", -1))
+          showPicture(photo, path);
+        }else{
+          showPicture(album.lastChild, album.lastChild.src.substr(album.lastChild.src.indexOf("static", -1)))
+        }
+
       }
     }
   };
+ 
   img.addEventListener('click', () => {table.style.display = 'none'})
 }
 
 
+function previous(node, selector) {
+  if (selector && document.querySelector(selector) !== node.previousElementSibling) {
+    return null;
+  }
+  return node.previousElementSibling;
+}
+
+function next(node, selector) {
+  if (selector && document.querySelector(selector) !== node.nextElementSibling) {
+    return null;
+  }
+  return node.nextElementSibling;
+}
 /*-----------------------------------------------------------------------------*/
 
 
