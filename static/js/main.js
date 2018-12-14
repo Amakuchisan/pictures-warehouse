@@ -129,7 +129,15 @@ function showPicture(picture){
   img.classList.toggle('table')
   table.appendChild(img)
   table.style.display = 'inline'
-  console.log("画像表示したいなあ")
+  document.onkeydown = function(e) {
+    if (e) event = e;
+    if (event) {
+      if (event.keyCode == 27) {
+        table.style.display = 'none'
+      }
+    }
+  };
+  img.addEventListener('click', () => {table.style.display = 'none'})
 }
 
 
