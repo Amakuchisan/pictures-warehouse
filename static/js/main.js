@@ -74,7 +74,7 @@ document.getElementById('cansel').addEventListener("click", () => {
 })
 /*----------------------------------------------------------------------------*/
 
-function afterPost() {
+function afterPost(formData) {
   const input = document.getElementById('img_file');
   const btn = document.getElementById('submit_btn');
   btn.disabled = false;
@@ -83,34 +83,6 @@ function afterPost() {
   formData = new FormData();
   renderPictures();
 }
-
-let formData = new FormData();
-
-const upload = () => {
-  const btn = document.getElementById('submit_btn');
-  file = document.getElementById('img_file');
-  if (!file.value){
-    return false;
-  }
-  btn.disabled = true;
-  btn.value="送信中";
-  fetch('/api/pics', {
-    mode: 'cors',
-    method: 'POST',
-    body: formData ,
-  }).then(res => res.json()
-  ).then(json => {
-    if(json["status"] == "false"){
-      alert(json["message"])
-    }
-    afterPost();
-  }).catch(err => {
-      alert("ファイルサイズが2MBを超えていませんか?")
-      afterPost();}
-  )
-};
-
-document.getElementById('submit_btn').addEventListener('click', upload, false);
 
 
 /*----------------------------------------------------------------------------*/
@@ -175,8 +147,34 @@ function next(node, selector) {
 
 /*-----------------------------------------------------------------------------*/
 
-window.addEventListener("load",  () => renderPictures());
+window.addEventListener("load", () => renderPictures());
 window.addEventListener("load", () => {
+  let formData = new FormData();
+  const upload = () => {
+    const btn = document.getElementById('submit_btn');
+    file = document.getElementById('img_file');
+    if (!file.value){
+      return false;
+    }
+    btn.disabled = true;
+    btn.value="送信中";
+    fetch('/api/pics', {
+      mode: 'cors',
+      method: 'POST',
+      body: formData ,
+    }).then(res => res.json()
+    ).then(json => {
+      if(json["status"] == "false"){
+        alert(json["message"])
+      }
+      afterPost(formData);
+    }).catch(err => {
+      alert("ファイルサイズが2MBを超えていませんか?")
+      afterPost(formData);}
+    )
+  };
+
+  document.getElementById('submit_btn').addEventListener('click', upload, false);
   const input = document.getElementById('img_file');
   input.addEventListener("change", () => {
     formData = new FormData();
