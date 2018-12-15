@@ -11,7 +11,7 @@ function renderPictures() {
       album.appendChild(img)
       img.addEventListener("click", () => {
         if(del.value == '削除'){
-          showPicture(img, picture)
+          showPicture(img)
         }else{
           img.classList.toggle('select')
         }
@@ -42,7 +42,6 @@ document.getElementById('delete').addEventListener("click", () => {
 function del (){
   const del = document.getElementById('delete')
   del.value = "削除する!!"
-  console.log('delete')
   let pictures = document.querySelectorAll("img")
   pictures.forEach(picture => {
     picture.addEventListener("click", function(){
@@ -101,29 +100,27 @@ const upload = () => {
     body: formData ,
   }).then(res => res.json()
   ).then(json => {
-    console.log(json)
     if(json["status"] == "false"){
       alert(json["message"])
     }
     afterPost();
   }).catch(err => {
-      console.log(err)
       alert("ファイルサイズが2MBを超えていませんか?")
       afterPost();}
   )
 };
 
-const onSelectFile = () => upload();
-document.getElementById('submit_btn').addEventListener('click', onSelectFile, false);
+document.getElementById('submit_btn').addEventListener('click', upload, false);
 
 
 /*----------------------------------------------------------------------------*/
 
 /*------写真を表示する------*/
 
-function showPicture(img_pic, picture){
+function showPicture(img_pic){
   const table = document.getElementById('pic_table');
   const album = document.getElementById('alter-album');
+  let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1)) 
   let pictures = album.childNodes;
   while (table.firstChild) table.removeChild(table.firstChild);
   let img = document.createElement('img')
@@ -140,18 +137,16 @@ function showPicture(img_pic, picture){
       }else if (event.keyCode == 39){
         let photo = next(img_pic)
         if(photo != null){
-          path = photo.src.substr(photo.src.indexOf("static", -1))
-          showPicture(photo, path);
+          showPicture(photo);
         }else{
-          showPicture(album.firstChild, album.firstChild.src.substr(album.firstChild.src.indexOf("static", -1)))
+          showPicture(album.firstChild)
         }
       }else if(event.keyCode == 37){
         let photo = previous(img_pic)
         if(photo != null){
-          path = photo.src.substr(photo.src.indexOf("static", -1))
-          showPicture(photo, path);
+          showPicture(photo);
         }else{
-          showPicture(album.lastChild, album.lastChild.src.substr(album.lastChild.src.indexOf("static", -1)))
+          showPicture(album.lastChild)
         }
 
       }
