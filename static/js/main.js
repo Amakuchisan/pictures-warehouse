@@ -120,7 +120,7 @@ document.getElementById('submit_btn').addEventListener('click', upload, false);
 function showPicture(img_pic){
   const table = document.getElementById('pic_table');
   const album = document.getElementById('alter-album');
-  let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1)) 
+  let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
   let pictures = album.childNodes;
   while (table.firstChild) table.removeChild(table.firstChild);
   let img = document.createElement('img')
