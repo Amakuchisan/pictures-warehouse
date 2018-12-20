@@ -15,12 +15,18 @@ img{
 img.select{
     border-color: #CE1F1F;
 }
-
 img.table{
+   display: inline-block;
+   background: #FFFFFF;
+   width: auto;
+   height: auto;
+   margin-top: 10%;
+   margin-bottom: 10%;
    max-width: 100%;
    max-height: 100%;
    border: none;
 }
+
 .other-site {
     position:absolute;
     top: 20px;
@@ -49,13 +55,28 @@ img.table{
 
 
 
+.pic-slide {
+   background: #1d5acdaa;
+   position: fixed;
+   text-align:center;
+   display: none;
+   overflow: hidden;
+   top: 0;
+   bottom: 0;
+   right: 0;
+   left: 0;
+}
+
 .pic-table {
    position: fixed;
    display: none;
+   height: auto;
+   width: auto;
    margin-right: 10px;
+   margin-bottom: 20px;
    max-height: 90%;
+   max-width: 90%;
    top: 60px;
-   right 60px;
    overflow: hidden;
 }
 

@@ -93,19 +93,19 @@ function showPicture(img_pic){
   const table = document.getElementById('pic_table');
   const album = document.getElementById('alter-album');
   let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
-  let pictures = album.childNodes;
   while (table.firstChild) table.removeChild(table.firstChild);
   let img = document.createElement('img')
   img.src = picture
   img.classList.toggle('table')
   table.appendChild(img)
   table.style.display = 'inline'
- 
+
   document.onkeydown = function(e) {
     if (e) event = e;
     if (event) {
       if (event.keyCode == 27) {
         table.style.display = 'none'
+        img.classList.remove('table')
       }else if (event.keyCode == 39){
         let photo = next(img_pic)
         if(photo != null){
@@ -125,7 +125,10 @@ function showPicture(img_pic){
     }
   };
  
-  img.addEventListener('click', () => {table.style.display = 'none'})
+  img.addEventListener('click', () => {
+    table.style.display = 'none'
+    img.classList.remove('table')
+  })
 }
 
 
@@ -143,6 +146,38 @@ function next(node, selector) {
   return node.nextElementSibling;
 }
 /*-----------------------------------------------------------------------------*/
+/*スライドショーを流す*/
+function slideShow(img_pic){
+  const table = document.getElementById('pic_slide');
+  const album = document.getElementById('alter-album');
+  let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
+  while (table.firstChild) table.removeChild(table.firstChild);
+  let img = document.createElement('img')
+  img.src = picture
+  img.classList.add('table')
+  table.appendChild(img)
+  table.style.display = 'inline'
+ 
+  document.onkeydown = function(e) {
+    if (e) event = e;
+    if (event) {
+      if (event.keyCode == 27) {
+        table.style.display = 'none'
+        img.classList.remove('table')
+      }
+    }
+  }
+
+  img.addEventListener('click', () => {
+    table.style.display = 'none'
+    img.classList.remove('table')
+  })
+  let photo = next(img_pic)
+  if (photo == null) photo = album.firstChild
+  setTimeout(function(){
+    if(table.style.display!='none') slideShow(photo)
+  }, 1500);
+}
 
 
 /*-----------------------------------------------------------------------------*/
@@ -180,6 +215,23 @@ window.addEventListener("load", () => {
     formData = new FormData();
     formData.append('img_file', input.files[0]);
   });
+  const album = document.getElementById('alter-album')
+  const table = document.getElementById('pic_table');
+ 
+  document.getElementById('slide-show').addEventListener('click', () => {
+    let img_pic = table.firstChild //拡大した画像を消した後，tableのremoveがきちんとされない
+   // let img_pic = document.querySelector('img.table')
+    if(img_pic == null) {
+      slideShow(album.firstChild)
+    }else{
+      let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
+      let img = document.createElement('img')
+      img.src = picture
+      img.classList.remove('table')
+      table.style.display = 'none'
+      slideShow(img_pic)
+      while (table.firstChild) table.removeChild(table.firstChild);
+    }
+//img.tableのqueryをとってるけど、どうにかして次の画像をとれないだろうか
+  })
 })
-
-
