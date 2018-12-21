@@ -219,6 +219,7 @@ window.addEventListener("load", () => {
   const table = document.getElementById('pic_table');
  
   document.getElementById('slide-show').addEventListener('click', () => {
+    if(!album.hasChildNodes()) return
     let img_pic = table.firstChild //拡大した画像を消した後，tableのremoveがきちんとされない
    // let img_pic = document.querySelector('img.table')
     if(img_pic == null) {
