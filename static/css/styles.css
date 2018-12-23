@@ -15,13 +15,23 @@ img{
 img.select{
     border-color: #CE1F1F;
 }
+
+img.slide{
+   display: inline-block;
+   width: auto;
+   height: auto;
+   top: 60px;
+   max-width: 100%;
+   max-height: 100%;
+   border: none;
+}
+
 img.table{
    display: inline-block;
    background: #FFFFFF;
-   width: auto;
-   height: auto;
-   margin-top: 10%;
-   margin-bottom: 10%;
+   right: 0px;
+   width: 100%;
+   height: 100%;
    max-width: 100%;
    max-height: 100%;
    border: none;
@@ -56,27 +66,26 @@ img.table{
 
 
 .pic-slide {
-   background: #1d5acdaa;
-   position: fixed;
-   text-align:center;
-   display: none;
-   overflow: hidden;
-   top: 0;
-   bottom: 0;
-   right: 0;
-   left: 0;
+    background: #1d5acdaa;
+    position: fixed;
+    text-align:center;
+    display: none;
+    overflow: hidden;
+    padding: 60px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 
 .pic-table {
-   position: fixed;
-   display: none;
-   height: auto;
-   width: auto;
-   margin-right: 10px;
-   margin-bottom: 20px;
-   max-height: 90%;
-   max-width: 90%;
-   top: 60px;
-   overflow: hidden;
+    background: #CE1F1F;
+    position: fixed;
+    display: none;
+    right: 10px;
+    max-width: 50%;
+    max-height: 80%;
+    margin-top: 50px;
+    overflow: scroll;
 }
 

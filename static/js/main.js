@@ -98,7 +98,7 @@ function showPicture(img_pic){
   img.src = picture
   img.classList.toggle('table')
   table.appendChild(img)
-  table.style.display = 'inline'
+  table.style.display = 'block'
 
   document.onkeydown = function(e) {
     if (e) event = e;
@@ -154,7 +154,7 @@ function slideShow(img_pic){
   while (table.firstChild) table.removeChild(table.firstChild);
   let img = document.createElement('img')
   img.src = picture
-  img.classList.add('table')
+  img.classList.add('slide')
   table.appendChild(img)
   table.style.display = 'inline'
  
@@ -163,14 +163,14 @@ function slideShow(img_pic){
     if (event) {
       if (event.keyCode == 27) {
         table.style.display = 'none'
-        img.classList.remove('table')
+        img.classList.remove('slide')
       }
     }
   }
 
   img.addEventListener('click', () => {
     table.style.display = 'none'
-    img.classList.remove('table')
+    img.classList.remove('slide')
   })
   let photo = next(img_pic)
   if (photo == null) photo = album.firstChild
