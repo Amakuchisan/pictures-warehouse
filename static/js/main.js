@@ -1,6 +1,6 @@
-/*------画像を投稿する------*/
+/*------画像を表示する------*/
 function renderPictures() {
-  const album = document.getElementById('alter-album');
+  const album = document.getElementById('alterAlbum');
   const del = document.getElementById('delete')
   del.value = '削除' // この2行はここでやる処理か?
   while (album.firstChild) album.removeChild(album.firstChild);
@@ -42,7 +42,7 @@ document.getElementById('delete').addEventListener("click", () => {
 function del (){
   const del = document.getElementById('delete')
   del.value = "削除する!!"
-  let pictures = document.querySelectorAll("img")
+  let pictures = document.querySelectorAll("#alterAlbum > img")
   pictures.forEach(picture => {
     picture.addEventListener("click", function(){
     })
@@ -75,8 +75,8 @@ document.getElementById('cansel').addEventListener("click", () => {
 /*----------------------------------------------------------------------------*/
 
 function afterPost(formData) {
-  const input = document.getElementById('img_file');
-  const btn = document.getElementById('submit_btn');
+  const input = document.getElementById('imgFile');
+  const btn = document.getElementById('submitBtn');
   btn.disabled = false;
   btn.value="送信";
   input.value = "";
@@ -87,97 +87,102 @@ function afterPost(formData) {
 
 /*----------------------------------------------------------------------------*/
 
-/*------写真を表示する------*/
+/*------写真を大きく表示する------*/
 
 function showPicture(img_pic){
-  const table = document.getElementById('pic_table');
-  const album = document.getElementById('alter-album');
-  let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
+  const table = document.getElementById('picTable');
+  const album = document.getElementById('alterAlbum');
+  let picture = "static/pic/" + img_pic.src.split('/').pop() //画像のパスの指定
   while (table.firstChild) table.removeChild(table.firstChild);
   let img = document.createElement('img')
   img.src = picture
-  img.classList.toggle('table')
+  img.classList.add('table')
   table.appendChild(img)
   table.style.display = 'block'
 
   document.onkeydown = function(e) {
     if (e) event = e;
     if (event) {
-      if (event.keyCode == 27) {
+      if (event.keyCode == 27) { //Escキー
         table.style.display = 'none'
+        table.removeChild(table.firstChild)
         img.classList.remove('table')
-      }else if (event.keyCode == 39){
-        let photo = next(img_pic)
-        if(photo != null){
-          showPicture(photo);
-        }else{
-          showPicture(album.firstChild)
-        }
-      }else if(event.keyCode == 37){
-        let photo = previous(img_pic)
-        if(photo != null){
-          showPicture(photo);
-        }else{
-          showPicture(album.lastChild)
-        }
-
-      }
-    }
+      }else if (event.keyCode == 39) { //右矢印キー
+        showPicture(next(img_pic)) //次の画像を表示
+      }else if(event.keyCode == 37) { //左矢印キー
+        showPicture(previous(img_pic)) //前の画像を表示
+      };
+    };
   };
- 
+
+
+  document.getElementById('slideShow').addEventListener('click', () => {
+    while (table.firstChild) table.removeChild(table.firstChild);
+    img.classList.remove('table')
+    table.style.display = 'none'
+    slideShow(img_pic)
+  });
+
   img.addEventListener('click', () => {
     table.style.display = 'none'
+    while (table.firstChild) table.removeChild(table.firstChild);
     img.classList.remove('table')
   })
 }
 
-
-function previous(node, selector) {
-  if (selector && document.querySelector(selector) !== node.previousElementSibling) {
-    return null;
-  }
-  return node.previousElementSibling;
+function next(node) {
+  const album = document.getElementById('alterAlbum');
+  if(node.nextElementSibling) return node.nextElementSibling
+  return album.firstElementChild
 }
 
-function next(node, selector) {
-  if (selector && document.querySelector(selector) !== node.nextElementSibling) {
-    return null;
-  }
-  return node.nextElementSibling;
+function previous(node) {
+  const album = document.getElementById('alterAlbum');
+  if(node.previousElementSibling) return node.previousElementSibling
+  return album.lastElementChild
 }
+
 /*-----------------------------------------------------------------------------*/
 /*スライドショーを流す*/
 function slideShow(img_pic){
-  const table = document.getElementById('pic_slide');
-  const album = document.getElementById('alter-album');
+  const slide = document.getElementById('picSlide');
+  const album = document.getElementById('alterAlbum');
   let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
-  while (table.firstChild) table.removeChild(table.firstChild);
+  let timerId
+  while (slide.firstChild) slide.removeChild(slide.firstChild);
   let img = document.createElement('img')
   img.src = picture
   img.classList.add('slide')
-  table.appendChild(img)
-  table.style.display = 'inline'
+  slide.appendChild(img)
+  slide.style.display = 'inline'
  
   document.onkeydown = function(e) {
     if (e) event = e;
     if (event) {
       if (event.keyCode == 27) {
-        table.style.display = 'none'
+        slide.style.display = 'none'
+        while (slide.firstChild) slide.removeChild(slide.firstChild);
         img.classList.remove('slide')
+        clearTimeout(timerId);
+        return
       }
     }
   }
 
+
+
   img.addEventListener('click', () => {
-    table.style.display = 'none'
+    slide.style.display = 'none'
+    while (slide.firstChild) slide.removeChild(slide.firstChild);
     img.classList.remove('slide')
-  })
+    clearTimeout(timerId);
+  });
   let photo = next(img_pic)
   if (photo == null) photo = album.firstChild
-  setTimeout(function(){
-    if(table.style.display!='none') slideShow(photo)
+  timerId = setTimeout(function(){
+  slideShow(photo)
   }, 1500);
-}
+};
 
 
 /*-----------------------------------------------------------------------------*/
@@ -186,8 +191,8 @@ window.addEventListener("load", () => renderPictures());
 window.addEventListener("load", () => {
   let formData = new FormData();
   const upload = () => {
-    const btn = document.getElementById('submit_btn');
-    file = document.getElementById('img_file');
+    const btn = document.getElementById('submitBtn');
+    file = document.getElementById('imgFile');
     if (!file.value){
       return false;
     }
@@ -209,30 +214,18 @@ window.addEventListener("load", () => {
     )
   };
 
-  document.getElementById('submit_btn').addEventListener('click', upload, false);
-  const input = document.getElementById('img_file');
+  document.getElementById('submitBtn').addEventListener('click', upload, false);
+  const input = document.getElementById('imgFile');
   input.addEventListener("change", () => {
     formData = new FormData();
-    formData.append('img_file', input.files[0]);
+    formData.append('imgFile', input.files[0]);
   });
-  const album = document.getElementById('alter-album')
-  const table = document.getElementById('pic_table');
+  const album = document.getElementById('alterAlbum')
+  const table = document.getElementById('picTable');
  
-  document.getElementById('slide-show').addEventListener('click', () => {
+  document.getElementById('slideShow').addEventListener('click', () => {
     if(!album.hasChildNodes()) return
-    let img_pic = table.firstChild //拡大した画像を消した後，tableのremoveがきちんとされない
-   // let img_pic = document.querySelector('img.table')
-    if(img_pic == null) {
-      slideShow(album.firstChild)
-    }else{
-      let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
-      let img = document.createElement('img')
-      img.src = picture
-      img.classList.remove('table')
-      table.style.display = 'none'
-      slideShow(img_pic)
-      while (table.firstChild) table.removeChild(table.firstChild);
-    }
-//img.tableのqueryをとってるけど、どうにかして次の画像をとれないだろうか
+    if(table.hasChildNodes()) return
+    slideShow(album.firstChild)
   })
 })
