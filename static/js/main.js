@@ -121,8 +121,9 @@ function showPicture(img_pic){
     while (table.firstChild) table.removeChild(table.firstChild);
     img.classList.remove('table')
     table.style.display = 'none'
-    slideShow(img_pic)
+//    slideShow(img_pic)
   });
+
 
   img.addEventListener('click', () => {
     table.style.display = 'none'
@@ -149,7 +150,6 @@ function slideShow(img_pic){
   const slide = document.getElementById('picSlide');
   const album = document.getElementById('alterAlbum');
   let picture = "static/pic/" + img_pic.src.split('/').pop() //画像のパスの指定
-  let timerId
   while (slide.firstChild) slide.removeChild(slide.firstChild);
   let img = document.createElement('img')
   img.src = picture
@@ -160,10 +160,6 @@ function slideShow(img_pic){
   let photo = next(img_pic)
   if (photo == null) photo = album.firstChild
 
-  setTimeout(function(){
-    slideShow(photo)
-  }, 1500);
-
   document.onkeydown = function(e) {
     if (e) event = e;
     if (event) {
@@ -171,7 +167,6 @@ function slideShow(img_pic){
         slide.style.display = 'none'
         while (slide.firstChild) slide.removeChild(slide.firstChild);
         img.classList.remove('slide')
-        return
       }
     }
   }
@@ -181,6 +176,10 @@ function slideShow(img_pic){
     while (slide.firstChild) slide.removeChild(slide.firstChild);
     img.classList.remove('slide')
   });
+
+  setTimeout(function(){
+    if (slide.hasChildNodes()) slideShow(photo)
+  }, 1500);
 };
 
 
@@ -224,7 +223,7 @@ window.addEventListener("load", () => {
  
   document.getElementById('slideShow').addEventListener('click', () => {
     if(!album.hasChildNodes()) return
-    if(table.hasChildNodes()) return
+//    if(table.hasChildNodes()) return
     slideShow(album.firstChild)
   })
 })
