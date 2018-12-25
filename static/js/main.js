@@ -148,7 +148,7 @@ function previous(node) {
 function slideShow(img_pic){
   const slide = document.getElementById('picSlide');
   const album = document.getElementById('alterAlbum');
-  let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
+  let picture = "static/pic/" + img_pic.src.split('/').pop() //画像のパスの指定
   let timerId
   while (slide.firstChild) slide.removeChild(slide.firstChild);
   let img = document.createElement('img')
