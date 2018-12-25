@@ -22,7 +22,6 @@ function renderPictures() {
 
 function getPictures() {
   return fetch("/api/pics")
-//  return fetch("/api/pics", { headers: {'Content-Security-Policy': "default-src 'self'"}})
     .then(res => res.json())
 }
 
@@ -93,42 +92,44 @@ function showPicture(img_pic){
   const table = document.getElementById('picTable');
   const album = document.getElementById('alterAlbum');
   const slideshow = document.getElementById('slideShow');
-  let picture = "static/pic/" + img_pic.src.split('/').pop() //画像のパスの指定
-  while (table.firstChild) table.removeChild(table.firstChild);
   let img = document.createElement('img')
-  img.src = picture
-  img.classList.add('table')
-  table.appendChild(img)
-  table.style.display = 'block'
 
-  document.onkeydown = function(e) {
-    if (e) event = e;
-    if (event) {
-      if (event.keyCode == 27) { //Escキー
-        table.style.display = 'none'
-        table.removeChild(table.firstChild)
-        img.classList.remove('table')
-      }else if (event.keyCode == 39) { //右矢印キー
-        showPicture(next(img_pic)) //次の画像を表示
-      }else if(event.keyCode == 37) { //左矢印キー
-        showPicture(previous(img_pic)) //前の画像を表示
+  let imgPic = function showPictures(img_pic){
+    let picture = "static/pic/" + img_pic.src.split('/').pop() //画像のパスの指定
+    while (table.firstChild) table.removeChild(table.firstChild);
+    img.src = picture
+    img.classList.add('table')
+    table.appendChild(img)
+    table.style.display = 'block'
+
+    document.onkeydown = function(e) {
+      if (e) event = e;
+      if (event) {
+        if (event.keyCode == 27) { //Escキー
+          table.style.display = 'none'
+          table.removeChild(table.firstChild)
+           img.classList.remove('table')
+        }else if (event.keyCode == 39) { //右矢印キー
+          showPictures(next(img_pic)) //次の画像を表示
+        }else if(event.keyCode == 37) { //左矢印キー
+          showPictures(previous(img_pic)) //前の画像を表示
+        };
       };
     };
-  };
 
-
+    img.addEventListener('click', () => {
+      table.style.display = 'none'
+      while (table.firstChild) table.removeChild(table.firstChild);
+      img.classList.remove('table')
+    })
+    return img_pic
+  }
   slideshow.addEventListener('click', () => {
     while (table.firstChild) table.removeChild(table.firstChild);
     img.classList.remove('table')
     table.style.display = 'none'
-    slideShow(img_pic)
+    slideShow(imgPic)//この辺ダメ
   });
-
-  img.addEventListener('click', () => {
-    table.style.display = 'none'
-    while (table.firstChild) table.removeChild(table.firstChild);
-    img.classList.remove('table')
-  })
 }
 
 function next(node) {
@@ -148,7 +149,7 @@ function previous(node) {
 function slideShow(img_pic){
   const slide = document.getElementById('picSlide');
   const album = document.getElementById('alterAlbum');
-  let picture = img_pic.src.substr(img_pic.src.indexOf("static", -1))
+  let picture = "static/pic/" + img_pic.src.split('/').pop() //画像のパスの指定
   let timerId
   while (slide.firstChild) slide.removeChild(slide.firstChild);
   let img = document.createElement('img')
